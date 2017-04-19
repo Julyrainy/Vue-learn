@@ -1,0 +1,121 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewpoint" content="width=device-width initial-scale=1" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <title>s</title>
+</head>
+
+<body>
+    <div class="panel panel-primary" id="mybody">
+      <div class="panel-heading">
+        <h3 class="panel-title">随便试试</h3>
+      </div><!-- panel-heading end -->
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>用户名</th>
+            <th>年龄</th>
+            <th>毕业学校</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <mylist v-for="(item,index) in items" v-bind:people="item" @remove="items.splice(index,1)" @change="edititem(index)">
+          </mylist>
+          </mylist>
+          <tr>
+            <td><input type="text" class="form-control" v-model="name"></td>
+            <td><input type="text" class="form-control" v-model="age"></td>
+            <td>
+              <select class="form-control" v-model="school">
+                <option disabled value="" selected="selected">选择学校</option>
+                <option>光明小学</option>
+                <option>复兴小学</option>
+                <option>中山小学</option>
+                <option>明光村小学</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control" v-model="tips"></td>
+            <td><button class="btn btn-primary" @click="additem">保存</button></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div><!-- panel end -->
+
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+
+    <script>
+      Vue.component('mylist',{
+        template:`  <tr>
+            <td>{{people.name}}</td>
+            <td>{{people.age}}</td>
+            <td>{{people.school}}</td>
+            <td>{{people.tips}}</td>
+            <td>
+              <a href="#" @click="edit">编辑</a>
+              <a href="#" @click="deleteitem">删除</a>
+            </td>
+          </tr>`,
+        props:["people"],
+        methods:{
+          edit:function(){
+            this.$emit('change');
+          },
+          deleteitem:function(){
+            this.$emit('remove');
+          }
+        }
+      });
+
+      new Vue({
+        el:"#mybody",
+        data:{
+          items:[],
+          /*list:{
+            name:'2',
+            age:'1',
+            school:'3',
+            tips:'4'
+          },*/
+          name:'',
+          age:'',
+          school:'',
+          tips:''
+        },
+        methods:{
+          edititem:function(index){
+            this.name = this.items[index].name;
+            this.age = this.items[index].age;
+            this.school = this.items[index].school;
+            this.tips = this.items[index].tips;
+          },
+          additem:function(){
+            var obj={
+              name:this.name,
+              age:this.age,
+              school:this.school,
+              tips:this.tips
+            };
+
+            this.items.push(obj);
+            console.log(this.items);
+            this.name='';
+            this.age='';
+            this.school='';
+            this.tips='';
+          }
+        }
+      })
+    </script>
+</body>
+
+</html>
